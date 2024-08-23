@@ -8,7 +8,7 @@ makedocs(sitename="TrixiEnzyme.jl",
             "Index" => "index.md",
             "An other page" => "anotherPage.md",
             "Acknowledgments" => "Acknowledgments.md",
-            "Contact Developer" => "Contact.md"
+            "Contact Developer" => "Contact.md",
          ],
          format = Documenter.HTML(prettyurls = false)
 )
