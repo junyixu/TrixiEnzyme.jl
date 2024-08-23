@@ -14,6 +14,7 @@ using Trixi: AbstractEquations, TreeMesh, DGSEM,
              wrap_array, compute_coefficients, have_nonconservative_terms,
              boundary_condition_periodic,
              set_log_type, set_sqrt_type
+import Enzyme
 using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero
 using Polyester: @batch
 

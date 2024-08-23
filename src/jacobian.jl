@@ -65,6 +65,7 @@ function jacobian_enzyme_reverse_closure(semi)
     end
 
     return dxs
+end
 
 """
     jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
