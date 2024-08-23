@@ -6,7 +6,7 @@ makedocs(sitename="TrixiEnzyme.jl",
          doctest = false,
          pages = [
             "Index" => "index.md",
-            "An other page" => "anotherPage.md",
+            "API reference" => "api.md",
             "Acknowledgments" => "Acknowledgments.md",
             "Contact Developer" => "Contact.md",
          ],

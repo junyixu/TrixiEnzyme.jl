@@ -6,12 +6,11 @@ The integration of Trixi.jl with Compiler-Based (LLVM level) automatic different
 """
 module TrixiEnzyme
 
-export plusTwo
+export plusTwo, jacobian_enzyme_forward, jacobian_enzyme_forward_closure
 
 using Trixi: AbstractEquations, TreeMesh, DGSEM,
              BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
              VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing,
-             compute_coefficients
              wrap_array, compute_coefficients, have_nonconservative_terms,
              boundary_condition_periodic,
              set_log_type, set_sqrt_type
@@ -40,6 +39,8 @@ julia> five = plusTwo(3)
 plusTwo(x) = return x+2
 
 include("prelude.jl")
+include("rhs.jl")
+include("jacobian.jl")
 
 
 end # module TrixiEnzyme
