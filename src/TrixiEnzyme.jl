@@ -8,7 +8,15 @@ module TrixiEnzyme
 
 export plusTwo
 
-greet() = print("Hello World!")
+using Trixi: AbstractEquations, TreeMesh, DGSEM,
+             BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
+             VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing,
+             compute_coefficients
+             wrap_array, compute_coefficients, have_nonconservative_terms,
+             boundary_condition_periodic,
+             set_log_type, set_sqrt_type
+using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero
+using Polyester: @batch
 
 """
     plusTwo(x)
@@ -30,6 +38,8 @@ julia> five = plusTwo(3)
 ```
 """
 plusTwo(x) = return x+2
+
+include("prelude.jl")
 
 
 end # module TrixiEnzyme
