@@ -76,7 +76,7 @@ of the semidiscretization `semi` at state `u0_ode`.
 
 ---
 
-    jacobian_enzyme_forward(f!:F, x::AbstractArray; N) where F <: Function
+    jacobian_enzyme_forward(f!::F, x::AbstractArray; N = pick_batchsize(x)) where F <: Function
 
 Uses the function `f!` and forward mode automatic differentiation to compute the Jacobian `J`
 
@@ -97,7 +97,8 @@ function jacobian_enzyme_forward end
 
 
 function jacobian_enzyme_forward(f!::F, x::AbstractArray; N = pick_batchsize(x)) where F <: Function
-    if N == length(x)
+    # if N == length(x)
+    if N == 1
         return vector_mode_jacobian_enzyme_forward(f!, x)
     else
         return batch_mode_jacobian_enzyme_forward(f!, x, N)

@@ -8,7 +8,7 @@ push!(LOAD_PATH,"../src/")
 makedocs(sitename="TrixiEnzyme.jl",
          doctest = false,
          pages = [
-            "Index" => "index.md",
+            "Home" => "index.md",
             "API reference" => "api.md",
             "Acknowledgments" => "Acknowledgments.md",
             "Contact Developer" => "Contact.md",
