@@ -32,14 +32,6 @@ function jacobian_enzyme_forward_closure(semi)
     return dys
 end
 
-```
-    jacobian_enzyme_reverse_closure(semi::SemidiscretizationHyperbolic)
-
-Same as jacobian_enzyme_reverse but with closure
-
-!!! warning
-Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.
-```
 function jacobian_enzyme_reverse_closure(semi)
     t0 = zero(real(semi))
     u_ode = compute_coefficients(t0, semi)
