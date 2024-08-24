@@ -1,3 +1,8 @@
+"""
+    upwind!(du, u, cache)
+
+vanilla upwind scheme
+"""
 function upwind!(du::Vector, u::Vector, cache)
     C = 0.2
     cache.numerical_flux .= u .* cache.v
