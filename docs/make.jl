@@ -10,6 +10,7 @@ makedocs(sitename="TrixiEnzyme.jl",
          pages = [
             "Home" => "index.md",
             "API reference" => "api.md",
+            "Examples" => "examples.md",
             "Acknowledgments" => "Acknowledgments.md",
             "Contact Developer" => "Contact.md",
          ],
