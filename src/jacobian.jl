@@ -189,8 +189,16 @@ function batch_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector, N) where F
 end
 
 # %%
+function jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic; N = pick_batchsize(x))
+    # if N == length(x)
+    if N == 1
+        return vector_mode_jacobian_enzyme_forward(semi)
+    else
+        return batch_mode_jacobian_enzyme_forward(semi, N)
+    end
+end
 
-function jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
+function vector_mode_jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
     t0 = zero(real(semi))
     u_ode = compute_coefficients(t0, semi)
     du_ode = similar(u_ode)
@@ -213,8 +221,8 @@ function jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
         Const(interfaces._neighbor_ids),
         Const(interfaces.neighbor_ids),
         Const(interfaces.orientations),
-        Duplicated(elements.surface_flux_values, Enzyme.make_zero(elements.surface_flux_values)),
-        Duplicated(interfaces.u, Enzyme.make_zero(interfaces.u)))
+        Duplicated(elements.surface_flux_values, make_zero(elements.surface_flux_values)),
+        Duplicated(interfaces.u, make_zero(interfaces.u)))
         dys[:, i] = dy
         dx[i] = 0.0
     end

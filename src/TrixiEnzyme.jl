@@ -9,6 +9,7 @@ module TrixiEnzyme
 export plusTwo, jacobian_enzyme_forward, jacobian_enzyme_forward_closure
 export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated, BatchDuplicatedNoNeed, Const
 
+import Trixi
 using Trixi: AbstractEquations, TreeMesh, DGSEM,
              BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
              VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing,
