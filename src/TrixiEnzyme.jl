@@ -7,7 +7,7 @@ The integration of Trixi.jl with Compiler-Based (LLVM level) automatic different
 module TrixiEnzyme
 
 export plusTwo, jacobian_enzyme_forward, jacobian_enzyme_forward_closure
-export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated, BatchDuplicatedNoNeed
+export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated, BatchDuplicatedNoNeed, Const
 
 using Trixi: AbstractEquations, TreeMesh, DGSEM,
              BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
@@ -16,29 +16,8 @@ using Trixi: AbstractEquations, TreeMesh, DGSEM,
              boundary_condition_periodic,
              set_log_type, set_sqrt_type
 import Enzyme
-using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero, BatchDuplicated, BatchDuplicatedNoNeed
+using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero, BatchDuplicated, BatchDuplicatedNoNeed, Const
 using Polyester: @batch
-
-"""
-    plusTwo(x)
-
-Sum the numeric "2" to whatever it receives as input
-
-A more detailed explanation can go here, although I guess it is not needed in this case
-
-# Arguments
-* `x`: The amount to which we want to add 2
-
-# Notes
-* Notes can go here
-
-# Examples
-```julia
-julia> five = plusTwo(3)
-5
-```
-"""
-plusTwo(x) = return x+2
 
 include("prelude.jl")
 include("rhs.jl")
