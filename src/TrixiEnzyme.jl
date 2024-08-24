@@ -11,7 +11,7 @@ export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated
 
 import Trixi
 using Trixi: AbstractEquations, TreeMesh, DGSEM, jacobian_ad_forward,
-             BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
+             BoundaryConditionPeriodic, SemidiscretizationHyperbolic, flux_lax_friedrichs,
              VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing, 
              wrap_array, compute_coefficients, have_nonconservative_terms,
              boundary_condition_periodic, LinearScalarAdvectionEquation1D,
