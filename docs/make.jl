@@ -1,8 +1,5 @@
 using Documenter
 using TrixiEnzyme
-import Trixi
-import Enzyme
-import Polyester
 
 DocMeta.setdocmeta!(TrixiEnzyme, :DocTestSetup, :(using TrixiEnzyme); recursive=true)
 

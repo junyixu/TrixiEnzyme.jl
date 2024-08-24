@@ -7,6 +7,7 @@ The integration of Trixi.jl with Compiler-Based (LLVM level) automatic different
 module TrixiEnzyme
 
 export plusTwo, jacobian_enzyme_forward, jacobian_enzyme_forward_closure
+export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated, BatchDuplicatedNoNeed
 
 using Trixi: AbstractEquations, TreeMesh, DGSEM,
              BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
@@ -15,7 +16,7 @@ using Trixi: AbstractEquations, TreeMesh, DGSEM,
              boundary_condition_periodic,
              set_log_type, set_sqrt_type
 import Enzyme
-using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero
+using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero, BatchDuplicated, BatchDuplicatedNoNeed
 using Polyester: @batch
 
 """
