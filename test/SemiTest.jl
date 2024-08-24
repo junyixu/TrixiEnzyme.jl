@@ -1,7 +1,7 @@
 module SemiTest
 using Test
 using TrixiEnzyme
-using TrixiEnzyme: LinearScalarAdvectionEquation1D, DGSEM, TreeMesh, SVector, flux_lax_friedrichs
+using TrixiEnzyme: LinearScalarAdvectionEquation1D, DGSEM, TreeMesh, SVector, flux_lax_friedrichs, SemidiscretizationHyperbolic
 
 # %%
 # equation with a advection_velocity of `1`.

@@ -11,14 +11,14 @@ TrixiEnzyme is not a registered Julia package, and it can be installed by runnin
 
 ## Notes about Enzyme
 
-There's some issues with `Enzyme.make_zero!` right now for this use case, see https://github.com/EnzymeAD/Enzyme.jl/issues/1661
-One need to be careful with a vanilla closure outside Enzyme.
+There's some [issues](flux_lax_friedrichs) with `Enzyme.make_zero!` right now for this use case.
+One needs to be careful with a vanilla closure outside Enzyme.
 If one writes to caches and expect to differentiate through them, then the closure should be duplicated for handling the derivative of those values.
 If you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation.
 if you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation
 So if you only have the original memory, you cannot do the differentiation since you don't have a place to store the extra values. In a simplified sense, a `Dual{Float64}` is 128 bits, `Float64` is 64 bits, so if you're writing to a buffer of 5 `Float64` numbers, you need 5*2*64 bits of space to keep a dual number, which you don't have
 So the best thing to do for a user would be to separate out the things that you need to track through, make them arguments to the function, and then simply Duplicate on those.
-This is how [TrixiEnzyme.jacobian_enzyme_forward](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.jacobian_enzyme_forward) works.
+This is how [`TrixiEnzyme.jacobian_enzyme_forward`](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.jacobian_enzyme_forward) works.
 
 ## Configuring Batch Size
 
