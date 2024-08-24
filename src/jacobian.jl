@@ -1,10 +1,5 @@
 Enzyme.API.runtimeActivity!(true)
 
-```
-    jacobian_enzyme_forward_closure(semi::SemidiscretizationHyperbolic)
-
-Same as jacobian_enzyme_forward but with closure.
-```
 function jacobian_enzyme_forward_closure(semi)
     t0 = zero(real(semi))
     u_ode = compute_coefficients(t0, semi)
