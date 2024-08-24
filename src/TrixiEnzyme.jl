@@ -10,12 +10,12 @@ export plusTwo, jacobian_enzyme_forward, jacobian_enzyme_forward_closure
 export autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, BatchDuplicated, BatchDuplicatedNoNeed, Const
 
 import Trixi
-using Trixi: AbstractEquations, TreeMesh, DGSEM,
+using Trixi: AbstractEquations, TreeMesh, DGSEM, jacobian_ad_forward
              BoundaryConditionPeriodic, SemidiscretizationHyperbolic,
-             VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing,
+             VolumeIntegralWeakForm, VolumeIntegralFluxDifferencing, 
              wrap_array, compute_coefficients, have_nonconservative_terms,
-             boundary_condition_periodic,
-             set_log_type, set_sqrt_type
+             boundary_condition_periodic, LinearScalarAdvectionEquation1D
+             set_log_type, set_sqrt_type, initial_condition_sine_wave, SVector
 import Enzyme
 using Enzyme: autodiff, Forward, Reverse, Duplicated, DuplicatedNoNeed, make_zero, BatchDuplicated, BatchDuplicatedNoNeed, Const
 using Polyester: @batch

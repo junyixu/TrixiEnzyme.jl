@@ -1,6 +1,5 @@
 module SemiTest
 using Test
-using Trixi
 using TrixiEnzyme
 
 # %%

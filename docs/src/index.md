@@ -11,6 +11,7 @@ TrixiEnzyme is not a registered Julia package, and it can be installed by runnin
 
 ## Configuring Batch Size
 
+To utilize `Enzyme.BatchDuplicated`, one can create a tuple containing duals (or shadows).
 TrixiEnzyme.jl performs partial derivative evaluation on one "batch" of the input vector at a time.
 Each differentiation of a batch requires a call to the target function as well as additional memory proportional to the square of the batch's size.
 Thus, a smaller batch size makes better use of memory bandwidth at the cost of more calls to the target function,
@@ -44,5 +45,5 @@ julia> @time jacobian_enzyme_forward(TrixiEnzyme.upwind!, x);
 ```
 
 Benchmark for a 401x401 Jacobian of `TrixiEnzyme.upwind!` (Lower is better):
-![upwind](https://private-user-images.githubusercontent.com/40481594/358694436-21588007-8469-46c5-8b77-e349b27c1c19.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmF3LmdpdGh1YnVzZXJjb250ZW50LmNvbSIsImtleSI6ImtleTUiLCJleHAiOjE3MjQ1MTQ2ODMsIm5iZiI6MTcyNDUxNDM4MywicGF0aCI6Ii80MDQ4MTU5NC8zNTg2OTQ0MzYtMjE1ODgwMDctODQ2OS00NmM1LThiNzctZTM0OWIyN2MxYzE5LnBuZz9YLUFtei1BbGdvcml0aG09QVdTNC1ITUFDLVNIQTI1NiZYLUFtei1DcmVkZW50aWFsPUFLSUFWQ09EWUxTQTUzUFFLNFpBJTJGMjAyNDA4MjQlMkZ1cy1lYXN0LTElMkZzMyUyRmF3czRfcmVxdWVzdCZYLUFtei1EYXRlPTIwMjQwODI0VDE1NDYyM1omWC1BbXotRXhwaXJlcz0zMDAmWC1BbXotU2lnbmF0dXJlPTVhZjMyZTRkODc1MTcxNzYxNTJlN2M4ZmMxYjUzNWFjZTc1MjBlOTYwOGVjMTAzNzM4YTEyNjA3YzUxMzkzMTImWC1BbXotU2lnbmVkSGVhZGVycz1ob3N0JmFjdG9yX2lkPTAma2V5X2lkPTAmcmVwb19pZD0wIn0.lr66vXaVZMmUnWw24uh30-u754ckRPYzBctskuEntJc)
+![upwind benchmark](../fig/upwind_benchmark.png)
 `Enyme(@batch)` means applying `Polyester.@batch` to `middlebatches`.
