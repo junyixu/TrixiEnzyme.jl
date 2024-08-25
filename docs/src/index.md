@@ -11,7 +11,7 @@ TrixiEnzyme is not a registered Julia package, and it can be installed by runnin
 
 ## Notes about Enzyme
 
-There's some [issues](flux_lax_friedrichs) with `Enzyme.make_zero!` right now for this use case.
+There's some [issues](https://github.com/EnzymeAD/Enzyme.jl/issues/1661) with `Enzyme.make_zero!` right now for this use case.
 One needs to be careful with a vanilla closure outside Enzyme.
 If one writes to caches and expect to differentiate through them, then the closure should be duplicated for handling the derivative of those values.
 If you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation.
