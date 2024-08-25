@@ -26,6 +26,11 @@ function enzyme_upwind!(du, u, v, flux)
 end
 
 # without closure
+"""
+    enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, boundaries, _node_coordinates, cell_ids, node_coordinates, inverse_jacobian, _neighbor_ids, neighbor_ids, orientation, surface_flux_values, u)
+
+The best thing to do for a user would be to separate out the things that you need to track through, make them arguments to the function, and then simply Duplicate on those.
+"""
 function enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, boundaries, _node_coordinates, cell_ids, node_coordinates, inverse_jacobian, _neighbor_ids, neighbor_ids, orientation, surface_flux_values, u)
 
     elements = Trixi.ElementContainer1D(inverse_jacobian,node_coordinates,surface_flux_values,cell_ids,_node_coordinates,vec(surface_flux_values))

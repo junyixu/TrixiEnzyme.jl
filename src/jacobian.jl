@@ -49,7 +49,7 @@ end
 Same as jacobian_enzyme_reverse but with closure
 
 !!! warning
-Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.
+    Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.
 """
 function jacobian_enzyme_reverse_closure(semi)
     t0 = zero(real(semi))
@@ -138,12 +138,12 @@ function vector_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector) where F <
     numerical_flux_shadow= zeros(length(x))
     dys = zeros(length(du_ode), length(du_ode))
     velocity = 1.0
-    ff! = @eval($(Symbol("enzyme_"*string(F.instance))))
+    enzyme_f! = @eval($(Symbol("enzyme_"*string(F.instance))))
 
     @batch for i in 1:length(x)
         dx[i] = 1.0
         # cache is passed to upwind!
-        Enzyme.autodiff(Enzyme.Forward, ff!, Enzyme.Duplicated(du_ode, dy), Enzyme.Duplicated(u_ode, dx), Const(velocity), Enzyme.Duplicated(numerical_flux, numerical_flux_shadow))
+        Enzyme.autodiff(Enzyme.Forward, enzyme_f!, Enzyme.Duplicated(du_ode, dy), Enzyme.Duplicated(u_ode, dx), Const(velocity), Enzyme.Duplicated(numerical_flux, numerical_flux_shadow))
         dys[:, i] .= dy
         dx[i] = 0.0
     end
@@ -171,8 +171,8 @@ function batch_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector, N) where F
     dy = ntuple(_->zeros(size(x)), N)
     flux = zeros(length(x))
     flux_shadows = ntuple(_->zeros(size(x)), N)
-    ff! = @eval($(Symbol("enzyme_"*string(F.instance))))
-    autodiff(Forward, ff!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
+    enzyme_f! = @eval($(Symbol("enzyme_"*string(F.instance))))
+    autodiff(Forward, enzyme_f!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
 
     for j = 1:N
         dys[:, j] .= dy[j]
@@ -185,7 +185,7 @@ function batch_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector, N) where F
             dx[j][j+i-1] = 1.0
         end
         #copyto!(dys, CartesianIndices((1:size(dys, 1), i:i+N-1)), dy, CartesianIndices(dy))
-        Enzyme.autodiff(Forward, ff!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
+        Enzyme.autodiff(Forward, enzyme_f!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
         for j = 1:N
             dys[:, i+j-1] .= dy[j]
             dx[j][j+i-1] = 0.0
@@ -198,7 +198,7 @@ function batch_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector, N) where F
     for j = 1:lastchunksize
         dx[j][j+lastchunkindex-1] = 1.0
     end
-    Enzyme.autodiff(Forward, ff!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
+    Enzyme.autodiff(Forward, enzyme_f!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(1.0), BatchDuplicatedNoNeed(flux, flux_shadows))
     for j = 1:lastchunksize
         dys[:, lastchunkindex+j-1] .= dy[j]
     end

@@ -11,18 +11,23 @@ TrixiEnzyme is not a registered Julia package, and it can be installed by runnin
 
 ## Notes about Enzyme
 
+Allocations of temporary arrays like these puts more pressure on the GC and impacts performance.
+That's why we have decided to pre-allocate them in `create_cache` - which is called when the semidiscretization `semi` is constructed.
+This is why we need Enzyme.jl, which supports mutating operations.
+
 There's some [issues](https://github.com/EnzymeAD/Enzyme.jl/issues/1661) with `Enzyme.make_zero!` right now for this use case.
 One needs to be careful with a vanilla closure outside Enzyme.
 If one writes to caches and expect to differentiate through them, then the closure should be duplicated for handling the derivative of those values.
 If you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation.
 if you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation
-So if you only have the original memory, you cannot do the differentiation since you don't have a place to store the extra values. In a simplified sense, a `Dual{Float64}` is 128 bits, `Float64` is 64 bits, so if you're writing to a buffer of 5 `Float64` numbers, you need 5*2*64 bits of space to keep a dual number, which you don't have
-So the best thing to do for a user would be to separate out the things that you need to track through, make them arguments to the function, and then simply Duplicate on those.
-This is how [`TrixiEnzyme.jacobian_enzyme_forward`](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.jacobian_enzyme_forward) works.
+So if you only have the original memory, you cannot do the differentiation since you don't have a place to store the extra values. In a simplified sense, a `Dual{Float64}` is 128 bits, `Float64` is 64 bits, so if you're writing to a buffer of 5 `Float64` numbers, you need 5*2*64 bits of space to keep a dual number, which you don't have.
+So the best thing to do for a user would be to separate out the things that you need to track through, make them arguments to [the function](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.enzyme_rhs!), and then simply Duplicate on those.
+This is how [`TrixiEnzyme.jacobian_enzyme_forward`](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.jacobian_enzyme_forward) works: get the arguments unpacked from `semi.cache` and duplicate them to store shadows.
 
 ## Configuring Batch Size
 
-To utilize `Enzyme.BatchDuplicated`, one can create a tuple containing duals (or shadows).
+To utilize [`Enzyme.BatchDuplicated(x, ∂f_∂xs)`](https://enzymead.github.io/Enzyme.jl/stable/api/#EnzymeCore.BatchDuplicated) or [`Enzyme.BatchDuplicatedNoNeed(x, ∂f_∂xs)`](https://enzymead.github.io/Enzyme.jl/stable/api/#EnzymeCore.BatchDuplicatedNoNeed),
+one can create a tuple containing duals (or shadows).
 TrixiEnzyme.jl performs partial derivative evaluation on one "batch" of the input vector at a time.
 Each differentiation of a batch requires a call to the target function as well as additional memory proportional to the square of the batch's size.
 Thus, a smaller batch size makes better use of memory bandwidth at the cost of more calls to the target function,
