@@ -15,7 +15,8 @@ Allocations of temporary arrays like these puts more pressure on the GC and impa
 That's why we have decided to pre-allocate them in `create_cache` - which is called when the semidiscretization `semi` is constructed.
 This is why we need Enzyme.jl, which supports mutating operations.
 
-There's some [issues](https://github.com/EnzymeAD/Enzyme.jl/issues/1661) with `Enzyme.make_zero!` right now for this use case.
+There's still some [caveats](https://github.com/EnzymeAD/Enzyme.jl/issues/1661)  to `make_zero!` since it's brand new so there's some edge cases on a few structures,
+but those will get worked out and this flow should be the recommended path.
 One needs to be careful with a vanilla closure outside Enzyme.
 If one writes to caches and expect to differentiate through them, then the closure should be duplicated for handling the derivative of those values.
 If you want to track derivatives through arrays that are enclosed, you have to duplicate the array to have shadow memory for its differentiation.

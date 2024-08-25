@@ -3,13 +3,13 @@ Enzyme.API.runtimeActivity!(true)
 """
     jacobian_enzyme_forward_closure(semi::SemidiscretizationHyperbolic)
 
-Same as jacobian_enzyme_forward but with closure
+Same as `jacobian_enzyme_forward` but with closure
 
 # Notes
 I resolved issues related to type instability caused by closures, which is a known limitation of Enzyme.
 
 I utilized closures here because they simplify the reuse of memory buffers and temporary variables without the need for explicit storage.
-let blocks create a new hard scope and optionally introduce new local bindings.
+`let` blocks create a new hard scope and optionally introduce new local bindings.
 """
 function jacobian_enzyme_forward_closure(semi)
     t0 = zero(real(semi))
@@ -46,7 +46,7 @@ end
 """
     jacobian_enzyme_reverse_closure(semi::SemidiscretizationHyperbolic)
 
-Same as jacobian_enzyme_reverse but with closure
+Same as `jacobian_enzyme_reverse` but with closure
 
 !!! warning
     Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.

@@ -1,7 +1,7 @@
 """
     upwind!(du, u, cache)
 
-vanilla upwind scheme
+Vanilla upwind scheme
 """
 function upwind!(du::Vector, u::Vector, cache)
     C = 0.2
