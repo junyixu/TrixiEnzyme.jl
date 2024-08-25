@@ -7,6 +7,11 @@ using Test, TrixiEnzyme
         t = @elapsed include("CommonTest.jl")
         println("##### done (took $t seconds).")
     end
+    @testset "Upwind" begin
+        println("##### Testing Upwind...")
+        t = @elapsed include("UpwindTest.jl")
+        println("##### done (took $t seconds).")
+    end
     @testset "Semi" begin
         println("##### Testing semi...")
         t = @elapsed include("SemiTest.jl")
