@@ -1,6 +1,6 @@
 # Examples
 
-## scalar linear advection equation in 1D
+## Scalar linear advection equation in 1D
 We will implement the scalar linear advection equation in 1D with the advection velocity 1 and compute its Jacobian.
 ```
 using Trixi
@@ -28,6 +28,7 @@ semi = SemidiscretizationHyperbolic(mesh, equations, initial_condition_sine_wave
 
 J1 = jacobian_ad_forward(semi)
 J2 = jacobian_enzyme_forward(semi;N=1)
+J3 = jacobian_enzyme_reverse(semi;N=1)
 
 J1 == J2
 ```

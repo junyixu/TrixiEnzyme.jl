@@ -13,7 +13,6 @@ makedocs(sitename="TrixiEnzyme.jl",
             "Examples" => "examples.md",
             "GSoC" => "GSoC.md",
             "Notes" => "notes.md",
-            "Acknowledgments" => "Acknowledgments.md",
             "Contact Developer" => "Contact.md",
          ],
          format = Documenter.HTML(prettyurls = false)
