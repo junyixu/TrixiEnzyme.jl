@@ -9,11 +9,6 @@
 ## Project Overview
 Trixi.jl is a numerical simulation framework for conservation laws written in Julia. The integration of Trixi.jl with Compiler-Based (LLVM level) automatic differentiation via Enzyme.jl offers the following benefits: facilitates rapid forward mode AD, enables reverse mode AD, supports cross-language AD, and critically, supports mutating operations and caching, on which Trixi.jl relies, to enhance the performance of both simulation runs and AD. The final deliverable will include as many of Trixi's advanced features as possible, such as adaptive mesh refinement, shock capturing, etc., showcasing the benefits of differentiable programming in Julia's ecosystem.
 
-## Pre-GSoC24
-- The GSoC proposal: Integrating the Modern CFD Package Trixi.jl with Compiler-Based Auto-Diff via Enzyme.jl (see PDF)
-- Implemented AD with pure Julia personally using guidance from a [blog](https://blog.rogerluo.dev/2018/10/23/write-an-ad-in-one-day/)
-
-## GSoC24
 - **Forward Mode Automatic Differentiation (AD) for Discontinuous Galerkin Collocation Spectral Element Method (DGSEM)**: Implement forward mode automatic differentiation to enhance the calculation of derivatives in DG methods, improving computational efficiency and accuracy for various applications.
 - **Reverse Mode Automatic Differentiation for DG**.
 - **Improve Performance**:

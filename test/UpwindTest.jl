@@ -27,7 +27,6 @@ end; # 0.326764 seconds (1.09 M allocations: 75.013 MiB, 7.28% gc time, 99.87% c
 @test J1 = J2
 
 @info "Compare the time consumed by Enzyme.jl Δt and ForwardDiff.jl..."
-println("Enzyme: ", Δt₁)
-println("ForwardDiff: ", Δt₂)
+@info "Enzyme: $Δt₁ seconds | ForwardDiff: $Δt₂ seconds."
 
 end

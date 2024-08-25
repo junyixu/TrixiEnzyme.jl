@@ -1,7 +1,7 @@
 Enzyme.API.runtimeActivity!(true)
 
 """
-    jacobian_enzyme_forward_closure(semi::SemidiscretizationHyperbolic)
+    jacobian_enzyme_forward_closure(semi::SemidiscretizationHyperbolic; N = pick_batchsize(semi))
 
 Same as `jacobian_enzyme_forward` but with closure
 
@@ -207,7 +207,7 @@ function batch_mode_jacobian_enzyme_forward(f!::F, x::AbstractVector, N) where F
 end
 
 # %%
-function jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic; N = pick_batchsize(x))
+function jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic; N = pick_batchsize(semi))
     # if N == length(x)
     if N == 1
         return vector_mode_jacobian_enzyme_forward(semi)
