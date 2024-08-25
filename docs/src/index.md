@@ -53,7 +53,11 @@ julia> @time jacobian_enzyme_forward(TrixiEnzyme.upwind!, x, N=11);
   0.000332 seconds (307 allocations: 410.453 KiB)
 ```
 
-If you do not explicitly provide a chunk size, TrixiEnzyme will try to guess one for you based on your input vector:
+When the cache is relatively small and you have appropriately chosen the batch size,
+Enzyme generally performs faster than ForwardDiff (see [test](https://github.com/junyixu/TrixiEnzyme.jl/blob/main/test/UpwindTest.jl)).
+![enzyme ForwardDiff upwind](./img/enzyme_ForwardDiff.png)
+
+If you do not explicitly provide a batch size, TrixiEnzyme will try to guess one for you based on your input vector:
 
 ```julia-repl
 julia> x = -1:0.01:1;
