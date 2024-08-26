@@ -86,11 +86,14 @@ function jacobian_enzyme_reverse_closure(semi)
 end
 
 """
-    jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
+    jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic; N = pick_batchsize(semi))
 
 Uses the right-hand side operator of the semidiscretization `semi`
 and forward mode automatic differentiation to compute the Jacobian `J`
 of the semidiscretization `semi` at state `u0_ode`.
+
+# Notes
+Both `jacobian_enzyme_forward(semi)` and `jacobian_enzyme_reverse(semi)` depend on `enzyme_rhs!`.
 
 ---
 
@@ -338,10 +341,13 @@ end
 """
     jacobian_enzyme_reverse(semi::SemidiscretizationHyperbolic)
 
+The jacobian_enzyme_reverse reuses containers for shadow variables.
+This might provide beginners with a clear view of how Enzyme works in detail.
+
 !!! warning
     Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.
 """
-function jacobian_enzyme_reverse(semi)
+function jacobian_enzyme_reverse(semi::SemidiscretizationHyperbolic)
     t0 = zero(real(semi))
     u_ode = compute_coefficients(t0, semi)
     du_ode = similar(u_ode)
@@ -364,8 +370,8 @@ function jacobian_enzyme_reverse(semi)
         Const(interfaces._neighbor_ids),
         Const(interfaces.neighbor_ids),
         Const(interfaces.orientations),
-        Duplicated(elements.surface_flux_values, Enzyme.make_zero(elements.surface_flux_values)),
-        Duplicated(interfaces.u, Enzyme.make_zero(interfaces.u)))
+        Duplicated(elements.surface_flux_values, make_zero(elements.surface_flux_values)),
+        Duplicated(interfaces.u, make_zero(interfaces.u)))
         dxs[i, :] .= dx
         dy[i] = 0.0
         dx .= 0.0
