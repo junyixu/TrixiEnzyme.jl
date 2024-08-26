@@ -246,3 +246,130 @@ function vector_mode_jacobian_enzyme_forward(semi::SemidiscretizationHyperbolic)
     end
     return dys
 end
+
+
+function batch_mode_jacobian_enzyme_forward(semi;
+        N = min(length(compute_coefficients(zero(real(semi)), semi)), 11))
+
+    t0 = zero(real(semi))
+    u_ode = compute_coefficients(t0, semi)
+    du_ode = similar(u_ode)
+
+    xlen = length(du_ode)
+    remainder = xlen % N
+    lastchunksize = ifelse(remainder == 0, N, remainder)
+    lastchunkindex = xlen - lastchunksize + 1
+    middlechunks = 2:div(xlen - lastchunksize, N)
+
+    (;mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache) = semi
+    (; boundaries, elements, interfaces) = cache
+
+    dx = Enzyme.onehot(u_ode, 1, N)
+    dy = ntuple(_->zeros(size(u_ode)), N)
+    dsurface_flux_values = ntuple(_->similar(elements.surface_flux_values), N)
+    dinterfaces_u  = ntuple(_->similar(interfaces.u), N)
+    dys = zeros(length(du_ode), length(du_ode))
+
+    Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+    Const(elements._node_coordinates),
+    Const(elements.cell_ids),
+    Const(elements.node_coordinates),
+    Const(elements.inverse_jacobian),
+    Const(interfaces._neighbor_ids),
+    Const(interfaces.neighbor_ids),
+    Const(interfaces.orientations),
+    BatchDuplicatedNoNeed(elements.surface_flux_values, dsurface_flux_values),
+    BatchDuplicatedNoNeed(interfaces.u, dinterfaces_u))
+
+    for j = 1:N
+        dys[:, j] .= dy[j]
+        dx[j][j] = 0.0
+    end
+
+    @batch for c in middlechunks
+        i = ((c - 1) * N + 1)
+        for j = 1:N
+            dx[j][j+i-1] = 1.0
+        end
+        #copyto!(dys, CartesianIndices((1:size(dys, 1), i:i+N-1)), dy, CartesianIndices(dy))
+        Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+        Const(elements._node_coordinates),
+        Const(elements.cell_ids),
+        Const(elements.node_coordinates),
+        Const(elements.inverse_jacobian),
+        Const(interfaces._neighbor_ids),
+        Const(interfaces.neighbor_ids),
+        Const(interfaces.orientations),
+        BatchDuplicatedNoNeed(elements.surface_flux_values, dsurface_flux_values),
+        BatchDuplicatedNoNeed(interfaces.u, dinterfaces_u))
+        for j = 1:N
+            dys[:, i+j-1] .= dy[j]
+            dx[j][j+i-1] = 0.0
+        end
+    end
+
+    dx = ntuple(_->zeros(size(du_ode)), lastchunksize)
+    dy = ntuple(_->zeros(size(du_ode)), lastchunksize)
+    dsurface_flux_values = ntuple(_->similar(elements.surface_flux_values), lastchunksize)
+    dinterfaces_u  = ntuple(_->similar(interfaces.u), lastchunksize)
+
+    for j = 1:lastchunksize
+        dx[j][j+lastchunkindex-1] = 1.0
+    end
+    Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+    Const(elements._node_coordinates),
+    Const(elements.cell_ids),
+    Const(elements.node_coordinates),
+    Const(elements.inverse_jacobian),
+    Const(interfaces._neighbor_ids),
+    Const(interfaces.neighbor_ids),
+    Const(interfaces.orientations),
+    BatchDuplicatedNoNeed(elements.surface_flux_values, dsurface_flux_values),
+    BatchDuplicatedNoNeed(interfaces.u, dinterfaces_u))
+    for j = 1:lastchunksize
+        dys[:, lastchunkindex+j-1] .= dy[j]
+    end
+
+    return dys
+end
+
+# %%
+
+"""
+    jacobian_enzyme_reverse(semi::SemidiscretizationHyperbolic)
+
+!!! warning
+    Enzyme.jl does not play well with Polyester.jl and there are no plans to fix this soon.
+"""
+function jacobian_enzyme_reverse(semi)
+    t0 = zero(real(semi))
+    u_ode = compute_coefficients(t0, semi)
+    du_ode = similar(u_ode)
+
+    # dxs = zeros(length(du_ode), length(du_ode))
+    dy = zero(du_ode)
+    dx = zero(u_ode)
+    dxs = zeros(length(du_ode), length(du_ode))
+
+    (;mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache) = semi
+    (; boundaries, elements, interfaces) = cache
+
+    for i in 1:length(du_ode)
+        dy[i] = 1.0
+        Enzyme.autodiff(Reverse, my_rhs!, Duplicated(du_ode, dy), Duplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+        Const(elements._node_coordinates),
+        Const(elements.cell_ids),
+        Const(elements.node_coordinates),
+        Const(elements.inverse_jacobian),
+        Const(interfaces._neighbor_ids),
+        Const(interfaces.neighbor_ids),
+        Const(interfaces.orientations),
+        Duplicated(elements.surface_flux_values, Enzyme.make_zero(elements.surface_flux_values)),
+        Duplicated(interfaces.u, Enzyme.make_zero(interfaces.u)))
+        dxs[i, :] .= dx
+        dy[i] = 0.0
+        dx .= 0.0
+    end
+
+    return dxs
+end

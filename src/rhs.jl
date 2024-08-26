@@ -45,12 +45,12 @@ function enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, mesh, equati
     return nothing
 end
 
-# # with closure
-# function enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, t, mesh, equations, initial_condition, boundary_conditions, source_terms, dg, cache)
-#     u = Trixi.wrap_array(u_ode, mesh, equations, solver, cache)
-#     du = Trixi.wrap_array(du_ode, mesh, equations, solver, cache)
-#     # Trixi.reset_du!(du, dg, cache)
-#     Trixi.rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
-#     return nothing
-# end
+# with closure
+function enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, t, mesh, equations, initial_condition, boundary_conditions, source_terms, dg, cache)
+    u = Trixi.wrap_array(u_ode, mesh, equations, solver, cache)
+    du = Trixi.wrap_array(du_ode, mesh, equations, solver, cache)
+    # Trixi.reset_du!(du, dg, cache)
+    Trixi.rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
+    return nothing
+end
 
