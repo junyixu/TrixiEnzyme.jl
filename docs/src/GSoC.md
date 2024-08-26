@@ -26,7 +26,7 @@ Please note that the last step was planned but remains incomplete due to time co
 
 - Functions intended for automatic differentiation with `Enzyme.autodiff` should adhere to specific naming conventions:
     - Functions must start with `enzyme_`.
-		- The primary role of these functions is to unpack `semi.cache` and accurately recreate `cache` for effective use with Enzyme’s APIs.
+    - The primary role of these functions is to unpack `semi.cache` and accurately recreate `cache` for effective use with Enzyme’s APIs.
 
 ### Configuration
 
