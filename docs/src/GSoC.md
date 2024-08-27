@@ -33,6 +33,11 @@ Please note that the last step was planned but remains incomplete due to time co
 - The functions `jacobian_enzyme_forward` and `jacobian_enzyme_reverse` are configured to behave similarly to `jacobian_ad_forward`, with the primary distinction being how `batchsize` is chosen:
     - An alternative usage pattern involves defining new functions prefixed with `enzyme_` and passing them to `jacobian_enzyme_forward` or `jacobian_enzyme_reverse` for differentiation.
 
+The sole distinction between using reverse mode AD and forward mode AD with `Enzyme.jl` is that you set `dy` as a onehot instead of setting `dx` as a onehot. However, there are some important considerations and potential issues to be aware of:
+- In reverse mode, `dx` needs to be [reset](https://github.com/junyixu/jacobian4DG/blob/bf4b60a74a344fc1abbc97c374cec17f7ef23a21/forward_AD_via_enzyme_milestone-06-28/ad_functions.jl#L70) to prevent it from impacting subsequent calculations.
+- In reverse mode, mutating functions should `return nothing`; failing to do so can lead to incorrect results from Enzyme.
+- In reverse mode, you must initialize intermediate values to zero; if not, Enzyme will yield incorrect outcomes.
+
 ### Optimization Strategies
 
 - To enhance performance, several optimization strategies are recommended:
