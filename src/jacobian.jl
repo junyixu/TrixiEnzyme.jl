@@ -30,7 +30,7 @@ function jacobian_enzyme_forward_closure(semi)
         source_terms = source_terms
         solver = solver
         cache = cache
-        my_rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
+        enzyme_rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
     end
 
     for i in 1:length(du_ode)
@@ -70,7 +70,7 @@ function jacobian_enzyme_reverse_closure(semi)
         source_terms = source_terms
         solver = solver
         cache = cache
-        my_rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
+        enzyme_rhs!(du, u, 0.0, mesh, equations, initial_condition, boundary_conditions, source_terms, solver, cache)
     end
 
     for i in 1:length(du_ode)
@@ -273,7 +273,7 @@ function batch_mode_jacobian_enzyme_forward(semi;
     dinterfaces_u  = ntuple(_->similar(interfaces.u), N)
     dys = zeros(length(du_ode), length(du_ode))
 
-    Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+    Enzyme.autodiff(Forward, enzyme_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
     Const(elements._node_coordinates),
     Const(elements.cell_ids),
     Const(elements.node_coordinates),
@@ -295,7 +295,7 @@ function batch_mode_jacobian_enzyme_forward(semi;
             dx[j][j+i-1] = 1.0
         end
         #copyto!(dys, CartesianIndices((1:size(dys, 1), i:i+N-1)), dy, CartesianIndices(dy))
-        Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+        Enzyme.autodiff(Forward, enzyme_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
         Const(elements._node_coordinates),
         Const(elements.cell_ids),
         Const(elements.node_coordinates),
@@ -319,7 +319,7 @@ function batch_mode_jacobian_enzyme_forward(semi;
     for j = 1:lastchunksize
         dx[j][j+lastchunkindex-1] = 1.0
     end
-    Enzyme.autodiff(Forward, my_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+    Enzyme.autodiff(Forward, enzyme_rhs!, BatchDuplicated(du_ode, dy), BatchDuplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
     Const(elements._node_coordinates),
     Const(elements.cell_ids),
     Const(elements.node_coordinates),
@@ -362,7 +362,7 @@ function jacobian_enzyme_reverse(semi::SemidiscretizationHyperbolic)
 
     for i in 1:length(du_ode)
         dy[i] = 1.0
-        Enzyme.autodiff(Reverse, my_rhs!, Duplicated(du_ode, dy), Duplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
+        Enzyme.autodiff(Reverse, enzyme_rhs!, Duplicated(du_ode, dy), Duplicated(u_ode, dx), Const(mesh), Const(equations), Const(initial_condition), Const(boundary_conditions), Const(source_terms), Const(solver), Const(boundaries),
         Const(elements._node_coordinates),
         Const(elements.cell_ids),
         Const(elements.node_coordinates),
