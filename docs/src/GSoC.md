@@ -16,7 +16,7 @@ Trixi.jl is a numerical simulation framework for conservation laws written in Ju
     - **`batchsize` for Jacobians**:
         - **Optimize for Memory Bandwidth**: Fine-tune the batch size in Jacobian computations to optimize the use of memory bandwidth, thus improving the overall performance and speed of the computations.
         - **Automatically [Pick](https://junyixu.github.io/TrixiEnzyme.jl/dev/api.html#TrixiEnzyme.pick_batchsize) `batchsize`**
-- **Explore Enzyme Custom Rules**: Investigate and implement custom rules within the Enzyme AD framework to handle specific cases and operations that are not optimally managed by the default settings, enhancing the flexibility and capability of the AD processes.
+- Interfaces to AD through `rhs_gpu!` (ongoing)
 
 Please note that the last step was planned but remains incomplete due to time constraints and this step will be completed in the future if possible.
 
@@ -48,9 +48,11 @@ The sole distinction between using reverse mode AD and forward mode AD with `Enz
 This package aims to provide a robust framework for integrating advanced differentiation techniques into Trixi, addressing both performance and usability to facilitate high-quality computational research and development.
 
 
-## Constraints and Future Work
-- **Make Reverse Mode AD Work with Polyester.jl**: Address compatibility issues and integrate reverse mode AD with Polyester.jl for multithreading capabilities, aiming to enhance performance and scalability of the AD operations across different computing environments.
-- **Integrate Enzyme with GPU Kernels**: Extend the functionality of Enzyme by integrating it with GPU kernels, allowing AD operations to leverage the parallel processing power of GPUs.
+## Future Work
+- **Automatic Differentiation of GPU Kernels**: Complete the prototype of Enzyme-based Jacobian computation (`src/gpu.jl`) for `rhs_gpu`! functions to match all TrixiCUDA.jl's functionalities
+- Resolve [Issue #1](https://github.com/junyixu/TrixiEnzyme.jl/issues/1) and [Issue #11](https://github.com/EnzymeAD/Enzyme.jl/issues/2260)
+	- To define a [custom Enzyme rule](https://enzyme.mit.edu/julia/dev/generated/custom_rule/) for matrix `inv`?
+- **Add examples for ML paradigms**: Maybe extend [the "Differentiating through a complete simulation" section](https://trixi-framework.github.io/Trixi.jl/dev/tutorials/differentiable_programming/#Differentiating-through-a-complete-simulation)?
 
 ## Acknowledgments
 
