@@ -50,8 +50,8 @@ This package aims to provide a robust framework for integrating advanced differe
 
 ## Future Work
 - **Automatic Differentiation of GPU Kernels**: Complete the prototype of Enzyme-based Jacobian computation (`src/gpu.jl`) for `rhs_gpu`! functions to match all TrixiCUDA.jl's functionalities
-- Resolve [Issue #1](https://github.com/junyixu/TrixiEnzyme.jl/issues/1) and [Issue #11](https://github.com/EnzymeAD/Enzyme.jl/issues/2260)
-	- To define a [custom Enzyme rule](https://enzyme.mit.edu/julia/dev/generated/custom_rule/) for matrix `inv`?
+- **Resolve [Issue #1](https://github.com/junyixu/TrixiEnzyme.jl/issues/1) and [Issue #2260](https://github.com/EnzymeAD/Enzyme.jl/issues/2260)**
+  - To define a [custom Enzyme rule](https://enzyme.mit.edu/julia/dev/generated/custom_rule/) for matrix `inv`?
 - **Add examples for ML paradigms**: Maybe extend [the "Differentiating through a complete simulation" section](https://trixi-framework.github.io/Trixi.jl/dev/tutorials/differentiable_programming/#Differentiating-through-a-complete-simulation)?
 
 ## Acknowledgments
