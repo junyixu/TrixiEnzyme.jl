@@ -31,5 +31,8 @@ using TrixiEnzyme
 - [x] Documentation
 - [ ] Including more AD Examples/Tutorials
 - [ ] GPU compatibility
+  - [X] Implement a GPU-accelerated gradient computation for the vanilla upwind scheme
+  - [X] Add interfaces for gradient computation for TrixiCUDA
+  - [ ] Compute Jacobian for TrixiCUDA (Both Forward and Reverse)
 - [ ] Benchmarking
     - WIP: [ISSUE#3](https://github.com/junyixu/jacobian4DG/issues/3)
