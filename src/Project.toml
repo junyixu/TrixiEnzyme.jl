@@ -1,0 +1,3 @@
+[deps]
+CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
+TrixiCUDA = "5056661c-942a-472c-b3bc-01507f717a60"
