@@ -10,7 +10,7 @@ integrates Trixi.jl with Compiler-Based (LLVM level) automatic differentiation v
 for hyperbolic partial differential equations (PDEs).
 This package was initialized through the **Google Summer of Code** program in 2024 and is still under development.
 
-See the [**Final Report** for GSoC '24](https://junyixu.github.io/TrixiEnzyme.jl/dev/GSoC.html).
+See the [**Final Report** for GSoC '24](https://gist.github.com/junyixu/214432fa239d53c24b685642e1cf0c4c).
 
 See the [documentation](https://junyixu.github.io/TrixiEnzyme.jl/dev/) for more.
 
