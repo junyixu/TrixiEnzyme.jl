@@ -54,3 +54,15 @@ function enzyme_rhs!(du_ode::AbstractVector, u_ode::AbstractVector, t, mesh, equ
     return nothing
 end
 
+function enzyme_rhs!(du_ode::CuArray, u_ode::CuArray, cache, mesh, equations, initial_condition, boundary_conditions, source_terms, solver)
+    # 直接使用 TrixiCUDA 提供的 rhs_gpu!
+    TrixiCUDA.rhs_gpu!(du_ode, u_ode, 0.0, mesh, equations, boundary_conditions, source_terms, solver, cache)
+    return nothing
+end
+
+function init_first_element_kernel!(arr)
+    if threadIdx().x == 1 && blockIdx().x == 1
+        arr[1] = 1.0
+    end
+    return nothing
+end
